@@ -24,7 +24,27 @@ class HomePageNavBar extends StatelessWidget{
           )
 
         ),
-        )
+        ),
+        ListTile(
+          leading: Icon(Icons.person),
+          title: Text('Profile'),
+          onTap: null,
+        ),
+        ListTile(
+          leading: Icon(Icons.event),
+          title: Text('My Events'),
+          onTap: null,
+        ),
+        ListTile(
+          leading: Icon(Icons.card_giftcard),
+          title: Text('My Gifts'),
+          onTap: null,
+        ),
+        ListTile(
+          leading: Icon(Icons.favorite),
+          title: Text('Pledged Gifts'),
+          onTap: null,
+        ),
       ],
     ),
     );
