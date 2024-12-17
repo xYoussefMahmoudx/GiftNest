@@ -1,6 +1,9 @@
 import 'package:sqflite/sqflite.dart';
+import '../model/User.dart';
 import 'DataBaseClass.dart';
 import 'package:giftnest/model/Event.dart';
+
+import 'FriendshipHelper.dart';
 
 class EventHelper {
   final DataBaseClass dbClass = DataBaseClass();
@@ -24,5 +27,18 @@ class EventHelper {
   Future<int> deleteEvent(int id) async {
     Database? db = await dbClass.database;
     return await db!.delete('Event', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> getUpcomingEventsCountByUserId(int? userId) async {
+    Database? db = await dbClass.database;
+    final now = DateTime.now().toIso8601String(); // Current time in ISO8601 format
+    List<Map<String, dynamic>> result = await db!.query(
+      'Event',
+      columns: ['id'], // We only need the IDs to count the rows
+      where: 'user_id = ? AND date > ?',
+      whereArgs: [userId, now],
+    );
+
+    return result.length; // The number of rows returned gives the count
   }
 }

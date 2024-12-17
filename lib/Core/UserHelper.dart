@@ -25,4 +25,23 @@ class UserHelper {
     Database? db = await dbClass.database;
     return await db!.delete('user', where: 'id = ?', whereArgs: [id]);
   }
+
+  Future<User?> getUserById(int userId) async {
+    Database? db = await dbClass.database;
+
+    // Query the user table for the user with the given userId
+    List<Map<String, dynamic>> result = await db!.query(
+      'user',
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
+
+    // If a user is found, map it to a User object and return it
+    if (result.isNotEmpty) {
+      return User.fromMap(result.first);
+    }
+
+    // Return null if no user is found
+    return null;
+  }
 }
