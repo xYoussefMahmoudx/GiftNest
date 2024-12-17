@@ -41,4 +41,17 @@ class EventHelper {
 
     return result.length; // The number of rows returned gives the count
   }
+  Future<List<Event>> getEventsByUserId(int? userId) async {
+    Database? db = await dbClass.database;
+
+    List<Map<String, dynamic>> result = await db!.query(
+      'Event',
+      where: 'user_id = ? ',
+      whereArgs: [userId],
+    );
+    // Map the results to a list of Event objects
+    List<Event> events = result.map((map) => Event.fromMap(map)).toList();
+    return events; // Return the list of events
+  }
+
 }

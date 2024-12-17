@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../Core/EventHelper.dart';
+import '../Core/UserHelper.dart';
+import 'EventListPage.dart';
+
 class FriendList extends StatelessWidget {
   final List<Map<String, dynamic>> friends;
 
@@ -23,6 +27,30 @@ class FriendList extends StatelessWidget {
                 : const CircleAvatar(child: Icon(Icons.person)),
             title: Text(friend['name']),
             subtitle: Text('Upcoming Events: ${friend['upcomingEvents']}'),
+            onTap: () async {
+              // Await the user and event data before navigating
+              print(friend['id'].toString());
+              var user = await UserHelper().getUserById(friend['id']); // Fetch user data
+              var events = await EventHelper().getEventsByUserId(friend['id']); // Fetch events
+
+              // Ensure that the user data is available
+              if (user != null) {
+                // Navigate to EventListPage with the fetched data
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EventListPage(
+                      title: user.firstName, // Display user's first name in the title
+                      events: events,
+                      isOwnEvents: false, // true because it's the logged-in user's events
+                    ),
+                  ),
+                );
+              } else {
+                // Handle the case when the user is not found
+                print('User not found');
+              }
+            },
           ),
         );
       },
