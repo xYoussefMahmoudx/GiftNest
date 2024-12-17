@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:giftnest/Core/EventHelper.dart';
 import 'package:intl/intl.dart'; // For date formatting
 import 'package:giftnest/model/Event.dart';
 
@@ -67,6 +68,7 @@ class _EventListPageState extends State<EventListPage> {
   }
 
   void _deleteEvent(Event event) {
+    EventHelper().deleteEvent(event.id);
     setState(() {
       _events.remove(event);
     });
