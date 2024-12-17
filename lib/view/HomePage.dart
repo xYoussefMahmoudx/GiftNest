@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:giftnest/view/HomePageNavBar.dart';
 import 'package:giftnest/Core/UserHelper.dart';
 import 'package:giftnest/Core/EventHelper.dart';
-
-import '../Core/FriendshipHelper.dart';
-import '../model/User.dart';
+import 'package:giftnest/Core/FriendshipHelper.dart';
+import 'package:giftnest/model/User.dart';
+import 'FriendSearchBar.dart';
+import 'FriendList.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -17,21 +17,22 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final UserHelper _userHelper = UserHelper();
   final EventHelper _eventHelper = EventHelper();
-  List<Map<String, dynamic>> _friends = []; // To store friends and their event data
+  List<Map<String, dynamic>> _friends = [];
+  List<Map<String, dynamic>> _filteredFriends = [];
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _loadFriends();
+    _searchController.addListener(_filterFriends);
   }
 
   Future<void> _loadFriends() async {
-    // Fetch all users from the UserHelper
     final List<User> allUsers = await FriendshipHelper().getUserFriends(2);
     List<Map<String, dynamic>> friendsData = [];
 
     for (var user in allUsers) {
-      // Get the count of upcoming events for each user
       final int upcomingEventsCount =
       await _eventHelper.getUpcomingEventsCountByUserId(user.id);
 
@@ -44,46 +45,47 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       _friends = friendsData;
+      _filteredFriends = friendsData; // Initially, show all friends
+    });
+  }
+
+  void _filterFriends() {
+    String query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredFriends = _friends
+          .where((friend) => friend['name'].toLowerCase().contains(query))
+          .toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffececec) ,
-      endDrawer:  HomePageNavBar(),
+      backgroundColor: const Color(0xffececec),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
         centerTitle: true,
+        actions: [
+          // Search bar in the AppBar
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              showSearch(context: context, delegate: FriendSearchBar(_filteredFriends));
+            },
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         label: const Text("Add Friend"),
-        onPressed: null, // Add your action here
+        onPressed: () {
+          // Add your action here
+        },
         icon: const Icon(Icons.add),
       ),
-      body: _friends.isEmpty
+      body: _filteredFriends.isEmpty
           ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-        itemCount: _friends.length,
-        itemBuilder: (context, index) {
-          final friend = _friends[index];
-          return Card(
-            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-            elevation: 4,
-            color: Colors.white,
-            child: ListTile(
-              leading: friend['photo'] != null
-                  ? CircleAvatar(
-                backgroundImage: MemoryImage(friend['photo']),
-              )
-                  : const CircleAvatar(child: Icon(Icons.person)),
-              title: Text(friend['name']),
-              subtitle: Text('Upcoming Events: ${friend['upcomingEvents']}'),
-            )
-          );
-        },
-      ),
+          : FriendList(friends: _filteredFriends),
     );
   }
 }
