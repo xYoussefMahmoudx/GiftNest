@@ -3,6 +3,7 @@ import 'package:giftnest/Core/UserHelper.dart';
 import 'package:giftnest/Core/EventHelper.dart';
 import 'package:giftnest/Core/FriendshipHelper.dart';
 import 'package:giftnest/model/User.dart';
+import 'package:giftnest/view/HomePageNavBar.dart';
 import 'FriendSearchBar.dart';
 import 'FriendList.dart';
 
@@ -37,6 +38,7 @@ class _HomePageState extends State<HomePage> {
       await _eventHelper.getUpcomingEventsCountByUserId(user.id);
 
       friendsData.add({
+        'id' : user.id,
         'name': '${user.firstName} ${user.lastName}',
         'photo': user.profileImage,
         'upcomingEvents': upcomingEventsCount,
@@ -61,6 +63,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: HomePageNavBar(),
       backgroundColor: const Color(0xffececec),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,

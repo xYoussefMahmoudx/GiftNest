@@ -1,0 +1,156 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // For date formatting
+import 'package:giftnest/model/Event.dart';
+
+class EventListPage extends StatefulWidget {
+  final String title; // User's first name
+  final List<Event> events; // List of events to display
+  final bool isOwnEvents; // Whether it's the logged-in user's events
+
+  const EventListPage({
+    super.key,
+    required this.title,
+    required this.events,
+    required this.isOwnEvents, // Pass true if it's the current user's events
+  });
+
+  @override
+  State<EventListPage> createState() => _EventListPageState();
+}
+
+class _EventListPageState extends State<EventListPage> {
+  late List<Event> _events;
+  late String _title;
+
+  @override
+  void initState() {
+    super.initState();
+    _events = widget.events;
+    _title = widget.title;
+  }
+
+  // Convert String date to DateTime for comparison
+  DateTime _parseDate(String date) {
+    return DateFormat('yyyy-MM-dd').parse(date);
+  }
+
+  // Get status based on date
+  String _getStatus(DateTime eventDate) {
+    DateTime now = DateTime.now();
+    if (eventDate.isAfter(now)) {
+      return 'Upcoming';
+    } else {
+      return 'Past';
+    }
+  }
+
+  // Sorting function
+  void _sortEvents(String criteria) {
+    setState(() {
+      if (criteria == 'Title') {
+        _events.sort((a, b) => a.title.compareTo(b.title));
+      } else if (criteria == 'Date') {
+        _events.sort((a, b) => _parseDate(a.date).compareTo(_parseDate(b.date)));
+      } else if (criteria == 'Status') {
+        _events.sort((a, b) => _getStatus(_parseDate(a.date)).compareTo(_getStatus(_parseDate(b.date))));
+      }
+    });
+  }
+
+  // Event Actions (Add, Edit, Delete)
+  void _addEvent() {
+    // Logic to add a new event
+  }
+
+  void _editEvent(Event event) {
+    // Logic to edit the selected event
+  }
+
+  void _deleteEvent(Event event) {
+    setState(() {
+      _events.remove(event);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('${_title}\'s Event List'),
+        actions: widget.isOwnEvents
+            ? [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: _addEvent,
+          ),
+        ]
+            : null,
+      ),
+      body: Column(
+        children: [
+          // Sorting Options
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () => _sortEvents('Title'),
+                  child: const Text('Sort by Title'),
+                ),
+                ElevatedButton(
+                  onPressed: () => _sortEvents('Date'),
+                  child: const Text('Sort by Date'),
+                ),
+                ElevatedButton(
+                  onPressed: () => _sortEvents('Status'),
+                  child: const Text('Sort by Status'),
+                ),
+              ],
+            ),
+          ),
+
+          // Event List
+          Expanded(
+            child: ListView.builder(
+              itemCount: _events.length,
+              itemBuilder: (context, index) {
+                final event = _events[index];
+                DateTime eventDate = _parseDate(event.date);
+                return Card(
+                  margin: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    title: Text(event.title),
+                    subtitle: Text(
+                      '${event.location} - ${_getStatus(eventDate)}- ${eventDate.toString()}- here: ${event.date}',
+                    ),
+                    trailing: widget.isOwnEvents
+                        ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () => _editEvent(event),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () => _deleteEvent(event),
+                        ),
+                      ],
+                    )
+                        : null,
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: widget.isOwnEvents
+          ? FloatingActionButton(
+                onPressed: null,
+               child: Icon(Icons.cloud_upload)
+      ):null,
+    );
+  }
+}
