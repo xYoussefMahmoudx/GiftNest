@@ -1,6 +1,9 @@
 import 'package:sqflite/sqflite.dart';
+import '../model/User.dart';
 import 'DataBaseClass.dart';
 import 'package:giftnest/model/Friendship.dart';
+
+import 'UserHelper.dart';
 
 class FriendshipHelper {
   final DataBaseClass dbClass = DataBaseClass();
@@ -49,4 +52,36 @@ class FriendshipHelper {
 
     return await db!.delete('friendship', where: 'user_id = ? AND friend_id = ?', whereArgs: [userId, friendId]);
   }
+  Future<List<User>> getUserFriends(int userId) async {
+    Database? db = await dbClass.database;
+
+    // Query for friendships where the given user_id is either the user or the friend
+    List<Map<String, dynamic>> result = await db!.query(
+      'friendship',
+      where: 'user_id = ? OR friend_id = ?',
+      whereArgs: [userId, userId],
+    );
+
+    // Extract the friend_id for each friendship entry (ignoring the user_id)
+    List friendIds = result.map((map) {
+      if (map['user_id'] == userId) {
+        return map['friend_id'];
+      } else {
+        return map['user_id'];
+      }
+    }).toList();
+
+    // Fetch user details for each friend_id
+    List<User> friends = [];
+    for (int friendId in friendIds) {
+      // Assuming you have a UserHelper class to get user details
+      User? friend = await UserHelper().getUserById(friendId);
+      if (friend != null) {
+        friends.add(friend);
+      }
+    }
+
+    return friends;
+  }
+
 }
