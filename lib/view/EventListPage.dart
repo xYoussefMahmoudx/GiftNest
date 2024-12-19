@@ -3,6 +3,8 @@ import 'package:giftnest/Core/EventHelper.dart';
 import 'package:intl/intl.dart'; // For date formatting
 import 'package:giftnest/model/Event.dart';
 
+import 'AddEventPage.dart';
+
 class EventListPage extends StatefulWidget {
   final String title; // User's first name
   final List<Event> events; // List of events to display
@@ -49,7 +51,7 @@ class _EventListPageState extends State<EventListPage> {
   void _sortEvents(String criteria) {
     setState(() {
       if (criteria == 'Title') {
-        _events.sort((a, b) => a.title.compareTo(b.title));
+        _events.sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
       } else if (criteria == 'Date') {
         _events.sort((a, b) => _parseDate(a.date).compareTo(_parseDate(b.date)));
       } else if (criteria == 'Status') {
@@ -60,8 +62,29 @@ class _EventListPageState extends State<EventListPage> {
 
   // Event Actions (Add, Edit, Delete)
   void _addEvent() {
-    // Logic to add a new event
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AddEventPage(
+          onAdd: (String title, String location, String? description, String date) {
+            setState(() {
+              var _newEvent=Event(
+                id: null, // ID will be assigned by the database
+                userId: 2, // Replace with the current user's ID
+                title: title,
+                date: date,
+                location: location,
+                description: description,
+              );
+              EventHelper().insertEvent(_newEvent);
+              _events.add(_newEvent);
+            });
+          },
+        );
+      },
+    );
   }
+
 
   void _editEvent(Event event) {
     // Logic to edit the selected event
@@ -124,7 +147,7 @@ class _EventListPageState extends State<EventListPage> {
                   child: ListTile(
                     title: Text(event.title),
                     subtitle: Text(
-                      '${event.location} - ${_getStatus(eventDate)}- ${eventDate.toString()}- here: ${event.date}',
+                      '${event.location} - ${_getStatus(eventDate)}\n${event.description}',
                     ),
                     trailing: widget.isOwnEvents
                         ? Row(
