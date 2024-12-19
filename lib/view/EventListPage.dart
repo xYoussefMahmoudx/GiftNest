@@ -4,6 +4,7 @@ import 'package:intl/intl.dart'; // For date formatting
 import 'package:giftnest/model/Event.dart';
 
 import 'AddEventPage.dart';
+import 'EditEventPage.dart';
 
 class EventListPage extends StatefulWidget {
   final String title; // User's first name
@@ -86,8 +87,28 @@ class _EventListPageState extends State<EventListPage> {
   }
 
 
-  void _editEvent(Event event) {
-    // Logic to edit the selected event
+  void _editEvent(Event event,int index) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return EditEventPage(
+              title: event.title,
+              description: event.description,
+              location: event.location,
+              date: event.date,
+          onEdit:(String title, String location, String? description, String date) {
+            setState(() {
+
+              _events.elementAt(index).title=title;
+              _events.elementAt(index).date= date;
+              _events.elementAt(index).location= location;
+              _events.elementAt(index).description= description;
+              EventHelper().updateEvent(_events.elementAt(index));
+            });
+          },
+        );
+      },
+    );
   }
 
   void _deleteEvent(Event event) {
@@ -155,7 +176,7 @@ class _EventListPageState extends State<EventListPage> {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.edit),
-                          onPressed: () => _editEvent(event),
+                          onPressed: () => _editEvent(event,index),
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete),
