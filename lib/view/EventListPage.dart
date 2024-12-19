@@ -3,6 +3,8 @@ import 'package:giftnest/Core/EventHelper.dart';
 import 'package:intl/intl.dart'; // For date formatting
 import 'package:giftnest/model/Event.dart';
 
+import 'AddEventPage.dart';
+
 class EventListPage extends StatefulWidget {
   final String title; // User's first name
   final List<Event> events; // List of events to display
@@ -60,8 +62,27 @@ class _EventListPageState extends State<EventListPage> {
 
   // Event Actions (Add, Edit, Delete)
   void _addEvent() {
-    // Logic to add a new event
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AddEventPage(
+          onAdd: (String title, String location, String? description, String date) {
+            setState(() {
+              _events.add(Event(
+                id: null, // ID will be assigned by the database
+                userId: 2, // Replace with the current user's ID
+                title: title,
+                date: date,
+                location: location,
+                description: description,
+              ));
+            });
+          },
+        );
+      },
+    );
   }
+
 
   void _editEvent(Event event) {
     // Logic to edit the selected event
