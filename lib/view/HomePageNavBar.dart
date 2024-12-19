@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:giftnest/Core/EventHelper.dart';
 import 'package:giftnest/Core/UserHelper.dart';
 import 'package:giftnest/view/EventListPage.dart';
+import 'package:giftnest/view/ProfilePage.dart';
 
 class HomePageNavBar extends StatelessWidget{
   @override
@@ -31,7 +32,24 @@ class HomePageNavBar extends StatelessWidget{
         ListTile(
           leading: Icon(Icons.person),
           title: Text('Profile'),
-          onTap: null,
+          onTap: () async {
+            // Await the user and event data before navigating
+            var user = await UserHelper().getUserById(2); // Fetch user data
+            // Ensure that the user data is available
+            if (user != null) {
+              // Navigate to EventListPage with the fetched data
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfilePage(
+                user: user,),
+                ),
+              );
+            } else {
+              // Handle the case when the user is not found
+              print('User not found');
+            }
+          },
         ),
         ListTile(
           leading: Icon(Icons.event),

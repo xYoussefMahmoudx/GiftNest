@@ -122,6 +122,7 @@ class _EventListPageState extends State<EventListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text('${_title}\'s Event List'),
         actions: widget.isOwnEvents
             ? [
