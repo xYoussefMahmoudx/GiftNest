@@ -24,7 +24,7 @@ class EventHelper {
     return await db!.update('Event', event.toMap(), where: 'id = ?', whereArgs: [event.id]);
   }
 
-  Future<int> deleteEvent(int id) async {
+  Future<int> deleteEvent(int? id) async {
     Database? db = await dbClass.database;
     return await db!.delete('Event', where: 'id = ?', whereArgs: [id]);
   }
