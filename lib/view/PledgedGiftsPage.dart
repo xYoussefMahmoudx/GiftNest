@@ -44,10 +44,18 @@ class _PledgedGiftsPageState extends State<PledgedGiftsPage> {
       }
 
       setState(() {
-        _events = events;
         _gifts = gifts;
+        _events = events;
+
         _pledgedGifts = pledgedGifts;
         _isLoading = false;
+        for(var gift in pledgedGifts){
+          print("pledge id ${gift.giftId.runtimeType.toString()}");
+        }
+        print("gift length  ${gifts.length.toString()}");
+        for(var gift in _gifts){
+          print("gift id ${gift.id.runtimeType.toString()}");
+        }
       });
     } catch (error) {
       setState(() {
@@ -62,12 +70,19 @@ class _PledgedGiftsPageState extends State<PledgedGiftsPage> {
 
   /// Get an Event by its ID
   Event? _getEventById(int eventId) {
-    return _events.firstWhere((event) => event.id == eventId);
+
+    for (var event in _events){
+      if(event.id == eventId)
+        return event;
+    }
   }
 
   /// Get a Gift by its ID
   Gift? _getGiftById(int giftId) {
-    return _gifts.firstWhere((gift) => gift.id == giftId);
+    for (var gift in _gifts){
+      if(gift.id == giftId)
+        return gift;
+    }
   }
 
   @override
@@ -86,6 +101,7 @@ class _PledgedGiftsPageState extends State<PledgedGiftsPage> {
         itemBuilder: (context, index) {
           final pledgedGift = _pledgedGifts[index];
           final gift = _getGiftById(pledgedGift.giftId);
+          print(gift?.id);
 
           if (gift == null) {
             return const SizedBox.shrink(); // Skip if gift is null
