@@ -8,6 +8,7 @@ import '../model/Event.dart';
 import '../model/Gift.dart';
 import '../model/User.dart';
 import 'AddGiftPage.dart';
+import 'EditGiftPage.dart';
 //import 'AddGiftPage.dart';
 //import 'EditGiftPage.dart';
 class GiftListPage extends StatefulWidget {
@@ -47,20 +48,6 @@ class _GiftListPageState extends State<GiftListPage> {
       _gifts = gifts;
     });
   }
-  // Convert String date to DateTime for comparison
-  DateTime _parseDate(String date) {
-    return DateFormat('yyyy-MM-dd').parse(date);
-  }
-
-  // Get status based on date
-  String _getStatus(DateTime giftDate) {
-    DateTime now = DateTime.now();
-    if (giftDate.isAfter(now)) {
-      return 'Upcoming';
-    } else {
-      return 'Past';
-    }
-  }
 
   // Sorting function
   void _sortgifts(String criteria) {
@@ -99,11 +86,34 @@ class _GiftListPageState extends State<GiftListPage> {
     );
   }
 
-  void _editGift(Gift gift, int index) {
-    // Show Edit Gift Dialog (not implemented in your current code)
-  }
+   void _editGift(Gift gift, int index) {
+     showDialog(
+       context: context,
+       builder: (context) {
+         return EditGiftPage(
+           events:widget.events ,
+           eventId: gift.eventId,
+           title: gift.title,
+           description: gift.description,
+           price: gift.price,
+           status: gift.status,
+           onEdit: (int eventId, String title, String? description, double price, String status) {
+             setState(() {
+               _gifts[index].eventId=eventId;
+               _gifts[index].title = title;
+               _gifts[index].description = description;
+               _gifts[index].price = price;
+               _gifts[index].status = status;
+               GiftHelper().updateGift(_gifts[index]);
+             });
+           },
+         );
+       },
+     );
+   }
 
-  void _deleteGift(Gift gift) {
+
+   void _deleteGift(Gift gift) {
    GiftHelper().deleteGift(gift.id);
    setState(() {
      _gifts.remove(gift);
@@ -157,16 +167,7 @@ class _GiftListPageState extends State<GiftListPage> {
               itemCount: _gifts.length,
               itemBuilder: (context, index) {
                 final gift = _gifts[index];
-                for( var gi in widget.events){
-                  print('event id :${gi.id}');
-                }
-                for( var gi in _gifts){
-                  print('gift id :${gi.eventId}');
-                  print('gift title :${gi.title}');
-                }
-
                 final event = _getEventById(gift.eventId); // Get the event details
-
                 return Card(
                   margin: const EdgeInsets.all(8.0),
                   child: ListTile(
