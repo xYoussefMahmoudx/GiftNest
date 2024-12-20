@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:giftnest/view/HomePage.dart';
+import 'package:giftnest/view/SignInPage.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'Core/UserHelper.dart';
@@ -17,11 +19,11 @@ Future<Uint8List> getImageBytes(String assetPath) async {
 void main() async {
   // Ensure Flutter bindings are initialized.
   WidgetsFlutterBinding.ensureInitialized();
-
+  Firebase.initializeApp();
   // Uncomment this line to populate the database.
   await populateDatabase();
   //await populateMoreDatabase();
-  /*/var alice= await UserHelper().getUserById(1) as User;
+  /*var alice= await UserHelper().getUserById(1) as User;
   Uint8List imageBytes = await getImageBytes('assets/alice.jpg');
   alice.profileImage=imageBytes;
   print(alice.profileImage.toString());
@@ -42,7 +44,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomePage(title: 'Gift Nest'),
+      home: const SignInPage(title: "Gift Nest",),
 
     );
   }
