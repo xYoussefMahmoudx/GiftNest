@@ -34,6 +34,28 @@ class GiftHelper {
 
     return result.map((map) => Gift.fromMap(map)).toList();
   }
+  Future<List<Gift>> getAllGiftsByGiftId(int giftId) async {
+    Database? db = await dbClass.database;
+    List<Map<String, dynamic>> result = await db!.query('Gift',where: "id=?",whereArgs: [giftId]);
+    return result.map((map) => Gift.fromMap(map)).toList();
+  }
+  Future<Gift?> getGiftById(int giftId) async {
+    Database? db = await dbClass.database;
+
+    // Query for the gift
+    List<Map<String, dynamic>> result = await db!.query(
+      'Gift',
+      where: "id = ?",
+      whereArgs: [giftId],
+      limit: 1, // Ensure only one row is returned
+    );
+
+    // Return the first gift or null if no result found
+    if (result.isNotEmpty) {
+      return Gift.fromMap(result.first);
+    }
+    return null;
+  }
 
   Future<int> updateGift(Gift gift) async {
     Database? db = await dbClass.database;

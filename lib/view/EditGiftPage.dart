@@ -122,7 +122,7 @@ class _EditGiftPageState extends State<EditGiftPage> {
               DropdownButtonFormField<String>(
                 value: _selectedStatus,
                 decoration: const InputDecoration(labelText: 'Status'),
-                items: ['Available', 'Reserved', 'Purchased']
+                items: ['Available']
                     .map((status) => DropdownMenuItem(
                   value: status,
                   child: Text(status),

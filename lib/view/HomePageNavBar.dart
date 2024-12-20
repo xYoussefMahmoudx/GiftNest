@@ -4,6 +4,7 @@ import 'package:giftnest/Core/EventHelper.dart';
 import 'package:giftnest/Core/GiftHelper.dart';
 import 'package:giftnest/Core/UserHelper.dart';
 import 'package:giftnest/view/EventListPage.dart';
+import 'package:giftnest/view/PledgedGiftsPage.dart';
 import 'package:giftnest/view/ProfilePage.dart';
 
 import '../model/User.dart';
@@ -127,7 +128,23 @@ HomePageNavBar({
         ListTile(
           leading: Icon(Icons.favorite),
           title: Text('Pledged Gifts'),
-          onTap: null,
+          onTap: () async {
+            // Ensure that the user data is available
+            if (user != null) {
+              // Navigate to EventListPage with the fetched data
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PledgedGiftsPage(
+                    user: user,
+                  ),
+                ),
+              );
+            } else {
+              // Handle the case when the user is not found
+              print('User not found');
+            }
+          },
         ),
       ],
     ),
