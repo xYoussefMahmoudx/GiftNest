@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../model/Event.dart';
+import 'dart:typed_data';
 
 class EditGiftPage extends StatefulWidget {
   final int eventId;
@@ -9,7 +11,8 @@ class EditGiftPage extends StatefulWidget {
   final String status;
   final List<Event> events; // List of available events
   final String category;
-  final Function(int eventId, String title, String? description, double price, String status,String category) onEdit;
+  final Uint8List giftImage;
+  final Function(int eventId, String title, String? description, double price, String status,String category,Uint8List giftImage) onEdit;
 
   const EditGiftPage({
     Key? key,
@@ -21,6 +24,7 @@ class EditGiftPage extends StatefulWidget {
     required this.events,
     required this.onEdit,
     required this.category,
+    required this.giftImage,
   }) : super(key: key);
 
   @override
@@ -36,7 +40,18 @@ class _EditGiftPageState extends State<EditGiftPage> {
 
   String? _selectedStatus;
   Event? _selectedEvent;
+  Uint8List? _giftImage;
 
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    Uint8List? _giftImagepick=Uint8List.fromList(await image!.readAsBytes());
+    if (image != null) {
+      setState(()  {
+        _giftImage = _giftImagepick;
+      });
+    }
+  }
   @override
   void initState() {
     super.initState();
@@ -46,6 +61,7 @@ class _EditGiftPageState extends State<EditGiftPage> {
     _selectedStatus = widget.status;
     _selectedEvent = widget.events.firstWhere((event) => event.id == widget.eventId);
     _categoryController.text=widget.category;
+    _giftImage=widget.giftImage;
   }
 
   @override
@@ -58,6 +74,16 @@ class _EditGiftPageState extends State<EditGiftPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              GestureDetector(
+                onTap: _pickImage,
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: _giftImage != null ? MemoryImage(_giftImage!) : null,
+                  child: _giftImage == null
+                      ? const Icon(Icons.add_a_photo, size: 30)
+                      : null,
+                ),
+              ),
               DropdownButtonFormField<Event>(
                 value: _selectedEvent,
                 decoration: const InputDecoration(labelText: 'Select Event'),
@@ -159,6 +185,7 @@ class _EditGiftPageState extends State<EditGiftPage> {
                 double.parse(_priceController.text),
                 _selectedStatus!,
                 _categoryController.text,
+                _giftImage!,
               );
               Navigator.pop(context);
             }
