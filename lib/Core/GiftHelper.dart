@@ -41,7 +41,7 @@ class GiftHelper {
     return await db!.update('Gift', gift.toMap(), where: 'id = ?', whereArgs: [gift.id]);
   }
 
-  Future<int> deleteGift(int id) async {
+  Future<int> deleteGift(int? id) async {
     Database? db = await dbClass.database;
     return await db!.delete('Gift', where: 'id = ?', whereArgs: [id]);
   }

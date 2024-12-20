@@ -104,7 +104,11 @@ class _GiftListPageState extends State<GiftListPage> {
   }
 
   void _deleteGift(Gift gift) {
-    // Delete the gift (not implemented in your current code)
+   GiftHelper().deleteGift(gift.id);
+   setState(() {
+     _gifts.remove(gift);
+   });
+
   }
 
   // Function to get Event by ID
