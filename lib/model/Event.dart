@@ -5,6 +5,8 @@ class Event {
   String date;
   String location;
   String? description;
+  String category;
+  String? lastEdited; // Nullable as it is set by the database
 
   Event({
     this.id,
@@ -13,6 +15,8 @@ class Event {
     required this.date,
     required this.location,
     this.description,
+    required this.category,
+    this.lastEdited, // Optional for database insertion
   });
 
   // Convert Event to Map for database
@@ -24,6 +28,9 @@ class Event {
       'date': date,
       'location': location,
       'description': description,
+      'category': category,
+      'last_edited':lastEdited,
+      // Exclude 'last_edited' from insertion, as it is database-managed
     };
   }
 
@@ -36,6 +43,8 @@ class Event {
       date: map['date'],
       location: map['location'],
       description: map['description'],
+      category: map['category'],
+      lastEdited: map['last_edited'],
     );
   }
 }

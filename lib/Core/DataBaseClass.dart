@@ -1,7 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-
 class DataBaseClass {
   static Database? _database; // Singleton Database
 
@@ -40,6 +39,8 @@ class DataBaseClass {
             date TEXT NOT NULL,
             location TEXT NOT NULL,
             description TEXT,
+            category TEXT NOT NULL, -- Added category
+            last_edited TEXT NOT NULL, -- Added last_edited timestamp
             FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
           )
         ''');
@@ -53,6 +54,9 @@ class DataBaseClass {
             description TEXT,
             price REAL NOT NULL,
             status TEXT NOT NULL,
+            category TEXT NOT NULL, -- Added category
+            image BLOB, -- Added image
+            last_edited TEXT NOT NULL, -- Added last_edited timestamp
             FOREIGN KEY (event_id) REFERENCES Event (id) ON DELETE CASCADE
           )
         ''');
@@ -68,10 +72,19 @@ class DataBaseClass {
             FOREIGN KEY (friend_id) REFERENCES user (id) ON DELETE CASCADE
           )
         ''');
+
+        // Create PledgedGift table
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS PledgedGift (
+            user_id INTEGER NOT NULL,
+            gift_id INTEGER NOT NULL,
+            PRIMARY KEY (user_id, gift_id),
+            FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
+            FOREIGN KEY (gift_id) REFERENCES Gift (id) ON DELETE CASCADE
+          )
+        ''');
       },
     );
     return mydb;
   }
-
-
 }

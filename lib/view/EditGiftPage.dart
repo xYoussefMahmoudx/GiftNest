@@ -8,7 +8,8 @@ class EditGiftPage extends StatefulWidget {
   final double price;
   final String status;
   final List<Event> events; // List of available events
-  final Function(int eventId, String title, String? description, double price, String status) onEdit;
+  final String category;
+  final Function(int eventId, String title, String? description, double price, String status,String category) onEdit;
 
   const EditGiftPage({
     Key? key,
@@ -19,6 +20,7 @@ class EditGiftPage extends StatefulWidget {
     required this.status,
     required this.events,
     required this.onEdit,
+    required this.category,
   }) : super(key: key);
 
   @override
@@ -30,6 +32,8 @@ class _EditGiftPageState extends State<EditGiftPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _categoryController = TextEditingController();
+
   String? _selectedStatus;
   Event? _selectedEvent;
 
@@ -41,6 +45,7 @@ class _EditGiftPageState extends State<EditGiftPage> {
     _priceController.text = widget.price.toStringAsFixed(2);
     _selectedStatus = widget.status;
     _selectedEvent = widget.events.firstWhere((event) => event.id == widget.eventId);
+    _categoryController.text=widget.category;
   }
 
   @override
@@ -103,10 +108,21 @@ class _EditGiftPageState extends State<EditGiftPage> {
                   return null;
                 },
               ),
+              TextFormField(
+                controller: _categoryController,
+                decoration: const InputDecoration(labelText: 'category'),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a category';
+                  }
+                  return null;
+                },
+              ),
               DropdownButtonFormField<String>(
                 value: _selectedStatus,
                 decoration: const InputDecoration(labelText: 'Status'),
-                items: ['Available', 'Reserved', 'Purchased']
+                items: ['Available']
                     .map((status) => DropdownMenuItem(
                   value: status,
                   child: Text(status),
@@ -142,6 +158,7 @@ class _EditGiftPageState extends State<EditGiftPage> {
                 _descriptionController.text,
                 double.parse(_priceController.text),
                 _selectedStatus!,
+                _categoryController.text,
               );
               Navigator.pop(context);
             }

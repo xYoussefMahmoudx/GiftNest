@@ -6,8 +6,9 @@ class EditEventPage extends StatefulWidget {
   String location;
   String? description;
   String date;
-  final Function(String title, String location, String? description, String date) onEdit;
-  EditEventPage({super.key,required this.title, required this.location, required this.description, required this.date,required this.onEdit});
+  String category;
+  final Function(String title, String location, String? description, String date,String category) onEdit;
+  EditEventPage({super.key,required this.title, required this.location, required this.description, required this.date,required this.onEdit,required this.category});
 
   @override
   State<EditEventPage> createState() => _EditEventPageState();
@@ -18,6 +19,7 @@ class _EditEventPageState extends State<EditEventPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController? _descriptionController = TextEditingController();
+  final TextEditingController _categoryController = TextEditingController();
   DateTime? _selectedDate;
   @override
   void initState() {
@@ -26,6 +28,7 @@ class _EditEventPageState extends State<EditEventPage> {
     _locationController.text = widget.location;
     _descriptionController?.text = widget.description!;
     _selectedDate=DateFormat('yyyy-MM-dd').parse(widget.date);
+    _categoryController.text=widget.category;
   }
 
 
@@ -63,6 +66,10 @@ class _EditEventPageState extends State<EditEventPage> {
                 controller: _descriptionController,
                 decoration: const InputDecoration(labelText: 'Description'),
               ),
+              TextFormField(
+                controller: _categoryController,
+                decoration: const InputDecoration(labelText: 'Category'),
+              ),
               const SizedBox(height: 10),
               DateTimeFormField(
                 decoration: const InputDecoration(
@@ -98,6 +105,7 @@ class _EditEventPageState extends State<EditEventPage> {
         _locationController.text,
         _descriptionController?.text,
         _selectedDate!.toIso8601String(),
+        _categoryController.text,
         );
         Navigator.pop(context);
         }

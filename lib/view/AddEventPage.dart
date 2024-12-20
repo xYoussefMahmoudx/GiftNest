@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
 class AddEventPage extends StatefulWidget {
-  final Function(String title, String location, String? description, String date) onAdd;
+  final Function(String title, String location, String? description, String date,String category) onAdd;
 
   const AddEventPage({Key? key, required this.onAdd}) : super(key: key);
 
@@ -14,6 +14,7 @@ class _AddEventPageState extends State<AddEventPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _categoryController = TextEditingController();
   DateTime? _selectedDate;
 
 
@@ -52,6 +53,10 @@ class _AddEventPageState extends State<AddEventPage> {
                 controller: _descriptionController,
                 decoration: const InputDecoration(labelText: 'Description'),
               ),
+              TextFormField(
+                controller: _categoryController,
+                decoration: const InputDecoration(labelText: 'Category'),
+              ),
               const SizedBox(height: 10),
               DateTimeFormField(
                 decoration: const InputDecoration(
@@ -87,6 +92,7 @@ class _AddEventPageState extends State<AddEventPage> {
                 _locationController.text,
                 _descriptionController.text,
                 _selectedDate!.toIso8601String(),
+                _categoryController.text,
               );
               Navigator.pop(context);
             }
