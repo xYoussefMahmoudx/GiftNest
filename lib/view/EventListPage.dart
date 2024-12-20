@@ -3,18 +3,21 @@ import 'package:giftnest/Core/EventHelper.dart';
 import 'package:intl/intl.dart'; // For date formatting
 import 'package:giftnest/model/Event.dart';
 
+import '../model/User.dart';
 import 'AddEventPage.dart';
 import 'EditEventPage.dart';
+import 'GiftListPage.dart';
 
 class EventListPage extends StatefulWidget {
   final String title; // User's first name
   final List<Event> events; // List of events to display
   final bool isOwnEvents; // Whether it's the logged-in user's events
-
+  final User user;
   const EventListPage({
     super.key,
     required this.title,
     required this.events,
+    required this.user,
     required this.isOwnEvents, // Pass true if it's the current user's events
   });
 
@@ -167,6 +170,19 @@ class _EventListPageState extends State<EventListPage> {
                 return Card(
                   margin: const EdgeInsets.all(8.0),
                   child: ListTile(
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GiftListPage(
+                            title: _title, // Display user's first name in the title
+                            user: widget.user,
+                            events: [event],
+                            isOwnGifts: widget.isOwnEvents, // true because it's the logged-in user's events
+                          ),
+                        ),
+                      );
+                    },
                     title: Text(event.title),
                     subtitle: Text(
                       '${event.location} - ${_getStatus(eventDate)}\n${event.description}',

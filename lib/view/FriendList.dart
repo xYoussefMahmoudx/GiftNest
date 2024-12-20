@@ -40,6 +40,7 @@ class FriendList extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => EventListPage(
+                      user: user,
                       title: user.firstName, // Display user's first name in the title
                       events: events,
                       isOwnEvents: false, // true because it's the logged-in user's events
