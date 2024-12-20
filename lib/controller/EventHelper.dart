@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import '../model/User.dart';
-import 'DataBaseClass.dart';
+import '../Core/DataBaseClass.dart';
 import 'package:giftnest/model/Event.dart';
 
 class EventHelper {

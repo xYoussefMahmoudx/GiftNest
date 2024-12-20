@@ -1,32 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:giftnest/Core/GiftHelper.dart';
-import 'package:giftnest/Core/PledgedGiftHelper.dart';
+import 'package:giftnest/controller/GiftHelper.dart';
+import 'package:giftnest/controller/PledgedGiftHelper.dart';
 import 'package:giftnest/model/PledgedGift.dart';
+import 'package:giftnest/view/GiftDetailsPage.dart';
 import 'package:intl/intl.dart'; // For date formatting
 import 'package:giftnest/model/Gift.dart';
-
-import '../Core/EventHelper.dart';
-import '../Core/UserHelper.dart';
+import 'dart:typed_data';
+import '../controller/EventHelper.dart';
+import '../controller/UserHelper.dart';
 import '../model/Event.dart';
-import '../model/Gift.dart';
 import '../model/User.dart';
 import 'AddGiftPage.dart';
 import 'EditGiftPage.dart';
-//import 'AddGiftPage.dart';
-//import 'EditGiftPage.dart';
+
 class GiftListPage extends StatefulWidget {
-  final String title; // User's first name
-  //final List<Gift> gifts; // List of gifts to display
-  final List<Event> events; // List of events to display
-  final bool isOwnGifts; // Whether it's the logged-in user's gifts
+  final String title;
+  final List<Event> events;
+  final bool isOwnGifts;
   final User user;
   const GiftListPage({
     super.key,
     required this.title,
-    //required this.gifts,
     required this.events,
     required this.user,
-    required this.isOwnGifts, // Pass true if it's the current user's gifts
+    required this.isOwnGifts,
 
   });
 
@@ -53,8 +50,8 @@ class _GiftListPageState extends State<GiftListPage> {
      });
    }
   Future<void> getGiftsofEvents()async {
-    var events = await EventHelper().getEventsByUserId(widget.user.id); // Fetch events
-    var gifts = await GiftHelper().getAllUserGiftsById(widget.user.id!,events); // Fetch events
+    var events = await EventHelper().getEventsByUserId(widget.user.id);
+    var gifts = await GiftHelper().getAllUserGiftsById(widget.user.id!,events);
     setState(() {
       _gifts = gifts;
     });
@@ -74,16 +71,17 @@ class _GiftListPageState extends State<GiftListPage> {
     });
   }
 
-  // Gift Actions (Add, Edit, Delete)
+
   void _addGift() {
     showDialog(
       context: context,
       builder: (context) {
         return AddGiftPage(
           events: widget.events,
-          onAdd: (int eventId, String title, String? description, double price, String status,String category){
+          onAdd: (int eventId, String title, String? description, double price, String status,String category,Uint8List giftImage){
             setState(() {
               var _newGift=Gift(
+                image: giftImage,
                 eventId: eventId,
                 title: title,
                 description: description,
@@ -106,6 +104,7 @@ class _GiftListPageState extends State<GiftListPage> {
        context: context,
        builder: (context) {
          return EditGiftPage(
+           giftImage: gift.image!,
            events:widget.events ,
            eventId: gift.eventId,
            title: gift.title,
@@ -113,8 +112,9 @@ class _GiftListPageState extends State<GiftListPage> {
            price: gift.price,
            category: gift.category,
            status: gift.status,
-           onEdit: (int eventId, String title, String? description, double price, String status,String category) {
+           onEdit: (int eventId, String title, String? description, double price, String status,String category,Uint8List giftImage) {
              setState(() {
+               _gifts[index].image=giftImage;
                _gifts[index].eventId=eventId;
                _gifts[index].title = title;
                _gifts[index].description = description;
@@ -196,7 +196,7 @@ class _GiftListPageState extends State<GiftListPage> {
               itemCount: _gifts.length,
               itemBuilder: (context, index) {
                 final gift = _gifts[index];
-                final event = _getEventById(gift.eventId); // Get the event details
+                final event = _getEventById(gift.eventId);
                 return Card(
                   margin: const EdgeInsets.all(8.0),
 
@@ -231,8 +231,15 @@ class _GiftListPageState extends State<GiftListPage> {
                       icon: const Icon(Icons.card_giftcard_sharp),
                       onPressed: () => _pledgeGift(gift),
                     )
-                    :Icon(Icons.done,)
-
+                    :Icon(Icons.done,),
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GiftDetailsPage(gift: gift,),
+                      ),
+                    );
+                  },
                 )
                 );
               },

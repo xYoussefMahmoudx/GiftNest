@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:giftnest/Core/UserHelper.dart';
-import 'package:giftnest/Core/EventHelper.dart';
-import 'package:giftnest/Core/FriendshipHelper.dart';
+import 'package:giftnest/controller/UserHelper.dart';
+import 'package:giftnest/controller/EventHelper.dart';
+import 'package:giftnest/controller/FriendshipHelper.dart';
 import 'package:giftnest/model/User.dart';
 import 'package:giftnest/view/HomePageNavBar.dart';
 import 'FriendSearchBar.dart';
@@ -16,7 +16,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final UserHelper _userHelper = UserHelper();
   final EventHelper _eventHelper = EventHelper();
   List<Map<String, dynamic>> _friends = [];
   List<Map<String, dynamic>> _filteredFriends = [];
@@ -27,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _loadFriends();
     _searchController.addListener(_filterFriends);
-    _fetchCurrentUser(); // Call a separate method for fetching the user
+    _fetchCurrentUser();
   }
   void _fetchCurrentUser() async {
     User? user = await UserHelper().getUserById(2);
@@ -54,7 +53,7 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       _friends = friendsData;
-      _filteredFriends = friendsData; // Initially, show all friends
+      _filteredFriends = friendsData;
     });
   }
 
@@ -71,7 +70,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: _currentUser == null
-    ? Center(child: CircularProgressIndicator()) // Show a loader
+    ? Center(child: CircularProgressIndicator())
         : HomePageNavBar(user: _currentUser!),
       backgroundColor: const Color(0xffececec),
       appBar: AppBar(
@@ -79,7 +78,7 @@ class _HomePageState extends State<HomePage> {
         title: Text(widget.title),
         centerTitle: true,
         actions: [
-          // Search bar in the AppBar
+
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {

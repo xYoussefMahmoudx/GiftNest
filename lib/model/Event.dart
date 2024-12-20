@@ -6,7 +6,7 @@ class Event {
   String location;
   String? description;
   String category;
-  String? lastEdited; // Nullable as it is set by the database
+  String? lastEdited;
 
   Event({
     this.id,
@@ -16,10 +16,10 @@ class Event {
     required this.location,
     this.description,
     required this.category,
-    this.lastEdited, // Optional for database insertion
+    this.lastEdited,
   });
 
-  // Convert Event to Map for database
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -30,7 +30,7 @@ class Event {
       'description': description,
       'category': category,
       'last_edited':lastEdited,
-      // Exclude 'last_edited' from insertion, as it is database-managed
+
     };
   }
 

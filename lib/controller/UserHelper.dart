@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-import 'DataBaseClass.dart';
+import '/Core/DataBaseClass.dart';
 import 'package:giftnest/model/User.dart';
 
 class UserHelper {

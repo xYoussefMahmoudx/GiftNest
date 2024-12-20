@@ -4,7 +4,7 @@ class User {
   String firstName;
   String lastName;
   String email;
-  Uint8List? profileImage; // Optional Blob for the profile image
+  Uint8List? profileImage;
   String? phoneNumber;
 
   User({

@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import '../model/PledgedGift.dart';
-import 'DataBaseClass.dart';
+import '../Core/DataBaseClass.dart';
 class PledgedGiftHelper {
   final DataBaseClass dbClass = DataBaseClass();
 
