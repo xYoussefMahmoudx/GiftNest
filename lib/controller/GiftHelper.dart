@@ -1,7 +1,7 @@
-import 'package:giftnest/Core/EventHelper.dart';
+import 'package:giftnest/controller/EventHelper.dart';
 import 'package:sqflite/sqflite.dart';
 import '../model/Event.dart';
-import 'DataBaseClass.dart';
+import '../Core/DataBaseClass.dart';
 import 'package:giftnest/model/Gift.dart';
 
 class GiftHelper {

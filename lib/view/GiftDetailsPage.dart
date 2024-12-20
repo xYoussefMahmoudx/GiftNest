@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'dart:typed_data';
+
 
 import '../model/Gift.dart';
 
 class GiftDetailsPage extends StatelessWidget {
-  final Gift gift; // The Gift object passed to this page
+  final Gift gift;
 
   const GiftDetailsPage({Key? key, required this.gift}) : super(key: key);
 
@@ -18,7 +18,7 @@ class GiftDetailsPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            // Display the gift image if it exists
+
             if (gift.image != null)
               Image.memory(
                 gift.image!,
@@ -77,7 +77,6 @@ class GiftDetailsPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8.0),
-            // Event ID (You can replace this with actual event details later)
             Text(
               'Event ID: ${gift.eventId}',
               style: const TextStyle(fontSize: 16.0),

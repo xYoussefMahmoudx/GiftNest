@@ -1,9 +1,9 @@
 import 'package:sqflite/sqflite.dart';
 import '../model/User.dart';
-import 'DataBaseClass.dart';
+import '../Core/DataBaseClass.dart';
 import 'package:giftnest/model/Friendship.dart';
 
-import 'UserHelper.dart';
+import '../controller/UserHelper.dart';
 
 class FriendshipHelper {
   final DataBaseClass dbClass = DataBaseClass();

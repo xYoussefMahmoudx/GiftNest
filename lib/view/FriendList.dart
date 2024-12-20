@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../Core/EventHelper.dart';
-import '../Core/UserHelper.dart';
+import '../controller/EventHelper.dart';
+import '../controller/UserHelper.dart';
 import 'EventListPage.dart';
 
 class FriendList extends StatelessWidget {
@@ -28,27 +28,26 @@ class FriendList extends StatelessWidget {
             title: Text(friend['name']),
             subtitle: Text('Upcoming Events: ${friend['upcomingEvents']}'),
             onTap: () async {
-              // Await the user and event data before navigating
               print(friend['id'].toString());
-              var user = await UserHelper().getUserById(friend['id']); // Fetch user data
-              var events = await EventHelper().getEventsByUserId(friend['id']); // Fetch events
+              var user = await UserHelper().getUserById(friend['id']);
+              var events = await EventHelper().getEventsByUserId(friend['id']);
 
-              // Ensure that the user data is available
+
               if (user != null) {
-                // Navigate to EventListPage with the fetched data
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => EventListPage(
                       user: user,
-                      title: user.firstName, // Display user's first name in the title
+                      title: user.firstName,
                       events: events,
-                      isOwnEvents: false, // true because it's the logged-in user's events
+                      isOwnEvents: false,
                     ),
                   ),
                 );
               } else {
-                // Handle the case when the user is not found
+
                 print('User not found');
               }
             },

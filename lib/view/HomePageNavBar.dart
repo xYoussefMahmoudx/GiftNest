@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:giftnest/Core/EventHelper.dart';
-import 'package:giftnest/Core/GiftHelper.dart';
-import 'package:giftnest/Core/UserHelper.dart';
+import 'package:giftnest/controller/EventHelper.dart';
+import 'package:giftnest/controller/GiftHelper.dart';
 import 'package:giftnest/view/EventListPage.dart';
 import 'package:giftnest/view/PledgedGiftsPage.dart';
 import 'package:giftnest/view/ProfilePage.dart';
@@ -14,7 +13,7 @@ class HomePageNavBar extends StatelessWidget{
   final User user;
 HomePageNavBar({
   super.key,
-  required this.user// Pass true if it's the current user's events
+  required this.user
 });
   @override
   Widget build(BuildContext context) {
@@ -30,10 +29,10 @@ HomePageNavBar({
               child: user.profileImage == null
                   ? SvgPicture.asset("assets/male_avatar.svg", fit: BoxFit.cover) // Fallback to SVG if no avatar
                   : Image.memory(
-                user.profileImage!, // Display image from the Blob
-                fit: BoxFit.cover, // Ensure image covers the circle fully
-                width: double.infinity, // Ensure it covers the entire area
-                height: double.infinity, // Ensure it covers the entire area
+                user.profileImage!,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
               ),
           ),
         ),

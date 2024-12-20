@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:giftnest/Core/EventHelper.dart';
-import 'package:intl/intl.dart'; // For date formatting
+import 'package:giftnest/controller/EventHelper.dart';
+import 'package:intl/intl.dart';
 import 'package:giftnest/model/Event.dart';
-
 import '../model/User.dart';
 import 'AddEventPage.dart';
 import 'EditEventPage.dart';
 import 'GiftListPage.dart';
 
 class EventListPage extends StatefulWidget {
-  final String title; // User's first name
-  final List<Event> events; // List of events to display
-  final bool isOwnEvents; // Whether it's the logged-in user's events
+  final String title;
+  final List<Event> events;
+  final bool isOwnEvents;
   final User user;
   const EventListPage({
     super.key,
     required this.title,
     required this.events,
     required this.user,
-    required this.isOwnEvents, // Pass true if it's the current user's events
+    required this.isOwnEvents,
   });
 
   @override
@@ -36,12 +35,12 @@ class _EventListPageState extends State<EventListPage> {
     _title = widget.title;
   }
 
-  // Convert String date to DateTime for comparison
+
   DateTime _parseDate(String date) {
     return DateFormat('yyyy-MM-dd').parse(date);
   }
 
-  // Get status based on date
+
   String _getStatus(DateTime eventDate) {
     DateTime now = DateTime.now();
     if (eventDate.isAfter(now)) {
@@ -64,7 +63,7 @@ class _EventListPageState extends State<EventListPage> {
     });
   }
 
-  // Event Actions (Add, Edit, Delete)
+
   void _addEvent() {
     showDialog(
       context: context,
@@ -73,8 +72,8 @@ class _EventListPageState extends State<EventListPage> {
           onAdd: (String title, String location, String? description, String date,String category) {
             setState(() {
               var _newEvent=Event(
-                id: null, // ID will be assigned by the database
-                userId: 2, // Replace with the current user's ID
+                id: null,
+                userId: 2,
                 title: title,
                 date: date,
                 location: location,
@@ -178,10 +177,10 @@ class _EventListPageState extends State<EventListPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => GiftListPage(
-                            title: _title, // Display user's first name in the title
+                            title: _title,
                             user: widget.user,
                             events: [event],
-                            isOwnGifts: widget.isOwnEvents, // true because it's the logged-in user's events
+                            isOwnGifts: widget.isOwnEvents,
                           ),
                         ),
                       );

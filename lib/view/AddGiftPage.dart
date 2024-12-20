@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:typed_data'; // For handling the image blob
+import 'dart:typed_data';
 import '../model/Event.dart';
 
 
 
 class AddGiftPage extends StatefulWidget {
-  final List<Event> events; // List of available events
+  final List<Event> events;
   final Function(int eventId, String title, String? description, double price, String status ,String category,Uint8List giftImage) onAdd;
 
   const AddGiftPage({

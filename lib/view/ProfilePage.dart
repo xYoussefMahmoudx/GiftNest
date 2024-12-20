@@ -1,9 +1,9 @@
-import 'dart:typed_data'; // For handling the image blob
+import 'dart:typed_data'; //
 import 'package:flutter/material.dart';
-import 'package:giftnest/Core/UserHelper.dart';
+import 'package:giftnest/controller/UserHelper.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../model/User.dart'; // For picking an image
+import '../model/User.dart';
 
 class ProfilePage extends StatefulWidget {
 final User user ;

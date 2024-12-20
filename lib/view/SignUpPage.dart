@@ -2,9 +2,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:firebase_database/firebase_database.dart';
 import 'package:giftnest/view/SignInPage.dart';
-import '../Core/UserHelper.dart';
+import '../controller/UserHelper.dart';
 import '../model/User.dart'as LocalUser;
 
 class SignUpPage extends StatefulWidget {
@@ -17,9 +16,7 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   final _auth = FirebaseAuth.instance;
-  //final _database = FirebaseDatabase.instance.reference();
 
-  // Controllers for form fields
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -57,15 +54,6 @@ class _SignUpPageState extends State<SignUpPage> {
           password: passwordController.text.trim(),
         );
 
-        /*final User? user = userCredential.user;
-        if (user != null) {
-          await _database.child('users').child(user.uid).set({
-            'firstName': firstNameController.text.trim(),
-            'lastName': lastNameController.text.trim(),
-            'email': emailController.text.trim(),
-            'phoneNumber': phoneController.text.trim(),
-            'profileImage': profileImageBlob,
-          });*/
         var user=
         UserHelper().insertUser(
             LocalUser.User(
@@ -225,7 +213,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: const Text('Sign Up'),
               ),
 
-              // Navigate to Sign-In Page
+
               TextButton(
                 onPressed: () {
 

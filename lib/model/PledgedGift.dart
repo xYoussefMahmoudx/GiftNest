@@ -7,7 +7,7 @@ class PledgedGift {
     required this.giftId,
   });
 
-  // Convert PledgedGift to Map for database
+
   Map<String, dynamic> toMap() {
     return {
       'user_id': userId,

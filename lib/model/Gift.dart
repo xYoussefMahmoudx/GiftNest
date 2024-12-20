@@ -9,7 +9,7 @@ class Gift {
   String status;
   String category;
   Uint8List? image;
-  String? lastEdited; // Nullable as it is set by the database
+  String? lastEdited;
 
   Gift({
     this.id,
@@ -20,10 +20,10 @@ class Gift {
     required this.status,
     required this.category,
     this.image,
-    this.lastEdited, // Optional for database insertion
+    this.lastEdited,
   });
 
-  // Convert Gift to Map for database
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -35,7 +35,7 @@ class Gift {
       'category': category,
       'image': image,
       'last_edited':lastEdited,
-      // Exclude 'last_edited' from insertion, as it is database-managed
+
     };
   }
 

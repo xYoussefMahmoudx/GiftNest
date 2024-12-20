@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:giftnest/view/HomePage.dart';
-import 'package:giftnest/view/SignUpPage.dart'; // Make sure to create and import your SignUpPage
+import 'package:giftnest/view/SignUpPage.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key, required this.title});
