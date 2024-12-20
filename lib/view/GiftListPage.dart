@@ -7,6 +7,7 @@ import '../Core/EventHelper.dart';
 import '../model/Event.dart';
 import '../model/Gift.dart';
 import '../model/User.dart';
+import 'AddGiftPage.dart';
 //import 'AddGiftPage.dart';
 //import 'EditGiftPage.dart';
 class GiftListPage extends StatefulWidget {
@@ -74,7 +75,28 @@ class _GiftListPageState extends State<GiftListPage> {
 
   // Gift Actions (Add, Edit, Delete)
   void _addGift() {
-    // Show Add Gift Dialog (not implemented in your current code)
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AddGiftPage(
+          events: widget.events,
+          onAdd: (int eventId, String title, String? description, double price, String status){
+            setState(() {
+              var _newGift=Gift(
+                eventId: eventId,
+                title: title,
+                description: description,
+                price: price,
+                status: status,
+
+              );
+              GiftHelper().insertGift(_newGift);
+              _gifts.add(_newGift);
+            });
+          },
+        );
+      },
+    );
   }
 
   void _editGift(Gift gift, int index) {
