@@ -21,12 +21,19 @@ class _HomePageState extends State<HomePage> {
   List<Map<String, dynamic>> _friends = [];
   List<Map<String, dynamic>> _filteredFriends = [];
   final TextEditingController _searchController = TextEditingController();
-
+  User? _currentUser;
   @override
-  void initState() {
+ void initState()  {
     super.initState();
     _loadFriends();
     _searchController.addListener(_filterFriends);
+    _fetchCurrentUser(); // Call a separate method for fetching the user
+  }
+  void _fetchCurrentUser() async {
+    User? user = await UserHelper().getUserById(2);
+    setState(() {
+      _currentUser = user!;
+    });
   }
 
   Future<void> _loadFriends() async {
@@ -63,7 +70,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: HomePageNavBar(),
+      drawer: _currentUser == null
+    ? Center(child: CircularProgressIndicator()) // Show a loader
+        : HomePageNavBar(user: _currentUser!),
       backgroundColor: const Color(0xffececec),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
