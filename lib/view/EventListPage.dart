@@ -70,7 +70,7 @@ class _EventListPageState extends State<EventListPage> {
       context: context,
       builder: (context) {
         return AddEventPage(
-          onAdd: (String title, String location, String? description, String date) {
+          onAdd: (String title, String location, String? description, String date,String category) {
             setState(() {
               var _newEvent=Event(
                 id: null, // ID will be assigned by the database
@@ -79,6 +79,7 @@ class _EventListPageState extends State<EventListPage> {
                 date: date,
                 location: location,
                 description: description,
+                category: category,
               );
               EventHelper().insertEvent(_newEvent);
               _events.add(_newEvent);
@@ -99,13 +100,15 @@ class _EventListPageState extends State<EventListPage> {
               description: event.description,
               location: event.location,
               date: event.date,
-          onEdit:(String title, String location, String? description, String date) {
+              category: event.category,
+          onEdit:(String title, String location, String? description, String date,String category) {
             setState(() {
 
               _events.elementAt(index).title=title;
               _events.elementAt(index).date= date;
               _events.elementAt(index).location= location;
               _events.elementAt(index).description= description;
+              _events.elementAt(index).category= category;
               EventHelper().updateEvent(_events.elementAt(index));
             });
           },

@@ -4,7 +4,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'Core/UserHelper.dart';
 import 'PopulateDB.dart';
-import 'PopulateMoreDB.dart';
 import 'model/User.dart';
 
 import 'package:flutter/services.dart';
@@ -20,14 +19,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Uncomment this line to populate the database.
-  //await populateDatabase();
+  await populateDatabase();
   //await populateMoreDatabase();
-  var alice= await UserHelper().getUserById(1) as User;
+  /*/var alice= await UserHelper().getUserById(1) as User;
   Uint8List imageBytes = await getImageBytes('assets/alice.jpg');
   alice.profileImage=imageBytes;
   print(alice.profileImage.toString());
   UserHelper().updateUser(alice);
-  print("Done alice photo");
+  print("Done alice photo");*/
   runApp(const MyApp());
 }
 

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 class Gift {
   int? id;
   int eventId;
@@ -5,6 +7,9 @@ class Gift {
   String? description;
   double price;
   String status;
+  String category;
+  Uint8List? image;
+  String? lastEdited; // Nullable as it is set by the database
 
   Gift({
     this.id,
@@ -13,6 +18,9 @@ class Gift {
     this.description,
     required this.price,
     required this.status,
+    required this.category,
+    this.image,
+    this.lastEdited, // Optional for database insertion
   });
 
   // Convert Gift to Map for database
@@ -24,6 +32,10 @@ class Gift {
       'description': description,
       'price': price,
       'status': status,
+      'category': category,
+      'image': image,
+      'last_edited':lastEdited,
+      // Exclude 'last_edited' from insertion, as it is database-managed
     };
   }
 
@@ -36,6 +48,9 @@ class Gift {
       description: map['description'],
       price: map['price'],
       status: map['status'],
+      category: map['category'],
+      image: map['image'],
+      lastEdited: map['last_edited'],
     );
   }
 }

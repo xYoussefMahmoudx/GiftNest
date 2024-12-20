@@ -67,7 +67,7 @@ class _GiftListPageState extends State<GiftListPage> {
       builder: (context) {
         return AddGiftPage(
           events: widget.events,
-          onAdd: (int eventId, String title, String? description, double price, String status){
+          onAdd: (int eventId, String title, String? description, double price, String status,String category){
             setState(() {
               var _newGift=Gift(
                 eventId: eventId,
@@ -75,6 +75,7 @@ class _GiftListPageState extends State<GiftListPage> {
                 description: description,
                 price: price,
                 status: status,
+                category: category,
 
               );
               GiftHelper().insertGift(_newGift);
@@ -96,15 +97,18 @@ class _GiftListPageState extends State<GiftListPage> {
            title: gift.title,
            description: gift.description,
            price: gift.price,
+           category: gift.category,
            status: gift.status,
-           onEdit: (int eventId, String title, String? description, double price, String status) {
+           onEdit: (int eventId, String title, String? description, double price, String status,String category) {
              setState(() {
                _gifts[index].eventId=eventId;
                _gifts[index].title = title;
                _gifts[index].description = description;
                _gifts[index].price = price;
                _gifts[index].status = status;
+               _gifts[index].category=category;
                GiftHelper().updateGift(_gifts[index]);
+
              });
            },
          );

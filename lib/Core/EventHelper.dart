@@ -3,13 +3,15 @@ import '../model/User.dart';
 import 'DataBaseClass.dart';
 import 'package:giftnest/model/Event.dart';
 
-import 'FriendshipHelper.dart';
-
 class EventHelper {
   final DataBaseClass dbClass = DataBaseClass();
 
   Future<int> insertEvent(Event event) async {
     Database? db = await dbClass.database;
+
+    // Update the last_edited timestamp
+    event.lastEdited = DateTime.now().toIso8601String();
+
     return await db!.insert('Event', event.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
@@ -21,6 +23,10 @@ class EventHelper {
 
   Future<int> updateEvent(Event event) async {
     Database? db = await dbClass.database;
+
+    // Update the last_edited timestamp
+    event.lastEdited = DateTime.now().toIso8601String();
+
     return await db!.update('Event', event.toMap(), where: 'id = ?', whereArgs: [event.id]);
   }
 
@@ -31,27 +37,25 @@ class EventHelper {
 
   Future<int> getUpcomingEventsCountByUserId(int? userId) async {
     Database? db = await dbClass.database;
-    final now = DateTime.now().toIso8601String(); // Current time in ISO8601 format
+    final now = DateTime.now().toIso8601String();
     List<Map<String, dynamic>> result = await db!.query(
       'Event',
-      columns: ['id'], // We only need the IDs to count the rows
+      columns: ['id'],
       where: 'user_id = ? AND date > ?',
       whereArgs: [userId, now],
     );
 
-    return result.length; // The number of rows returned gives the count
+    return result.length;
   }
+
   Future<List<Event>> getEventsByUserId(int? userId) async {
     Database? db = await dbClass.database;
-
     List<Map<String, dynamic>> result = await db!.query(
       'Event',
-      where: 'user_id = ? ',
+      where: 'user_id = ?',
       whereArgs: [userId],
     );
-    // Map the results to a list of Event objects
-    List<Event> events = result.map((map) => Event.fromMap(map)).toList();
-    return events; // Return the list of events
-  }
 
+    return result.map((map) => Event.fromMap(map)).toList();
+  }
 }
